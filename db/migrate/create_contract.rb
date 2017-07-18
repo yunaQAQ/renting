@@ -1,0 +1,8 @@
+class CreateContracts < ActiveRecord::Migration[5.0]
+	def change
+		create_table :contracts do |t|
+			t.date :start_date
+			t.date :end_date
+		end
+	end
+end
