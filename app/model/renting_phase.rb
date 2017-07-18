@@ -8,7 +8,7 @@ class RentingPhase < ApplicationRecord
 	def generate_invoices
 		cycles_num = self.cycles
 		invoice_start_date = self.start_date
-		invoice_total = self.price * self.cycles
+		invoice_total = self.price * cycles_num
 		loop do
 			invoice_end_date = invoice_start_date + cycles_num.month - 1.day
 			invoice_due_date = invoice_start_date.beginning_of_month - 1.month + 14.day
@@ -17,7 +17,7 @@ class RentingPhase < ApplicationRecord
 											 						end_date: invoice_end_date,
 											 						due_date: invoice_due_date,
 											 						total: invoice_total)
-				invovice.generate_line_items(self.price, cycles_num)
+				invovice.generate_line_items(invoice_start_date, invoice_end_date, self.price, cycles_num)
 				invoice_start_date = invoice_end_date
 			else
 				month_num = months_between_two_dates(invoice_start_date, self.end_date)
@@ -28,8 +28,10 @@ class RentingPhase < ApplicationRecord
 											 						end_date: self.end_date,
 											 						due_date: invoice_due_date,
 											 						total: invoice_total)
-				invovice.generate_line_items(self.price, month_num)
-				invovice.generate_line_items(day_rent, date_num)
+				line_item_end_date = invoice_start_date + month_num.month - 1.day
+				invovice.generate_line_items(invoice_start_date, line_item_end_date, self.price, month_num)
+				line_item_start_date = line_item_end_date + 1.day
+				invovice.generate_line_items(line_item_start_date, self.end_date, day_rent, date_num)
 				break
 			end
 		end
