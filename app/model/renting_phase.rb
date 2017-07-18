@@ -3,7 +3,7 @@ class RentingPhase < ApplicationRecord
 
 	validates_presence_of	:start_date, :end_date, :price, :cycles
 
-	after_create :generate_invoices
+	# after_create :generate_invoices
 
 	def generate_invoices
 		cycles_num = self.cycles

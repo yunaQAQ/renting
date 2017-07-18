@@ -25,5 +25,11 @@ class Contract < ApplicationRecord
 	def self.generate_contract(contract_params)
 		Contract.create(contract_params)
 	end
-	
+
+	def generate_invoices
+		self.renting_phases.each do |renting_phase|
+			renting_phase.generate_invoices
+		end
+	end
+
 end
