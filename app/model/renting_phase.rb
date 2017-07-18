@@ -17,6 +17,7 @@ class RentingPhase < ApplicationRecord
 											 						end_date: invoice_end_date,
 											 						due_date: invoice_due_date,
 											 						total: invoice_total)
+				invovice.generate_line_items(self.price, cycles_num)
 				invoice_start_date = invoice_end_date
 			else
 				month_num = months_between_two_dates(invoice_start_date, self.end_date)
@@ -27,6 +28,8 @@ class RentingPhase < ApplicationRecord
 											 						end_date: self.end_date,
 											 						due_date: invoice_due_date,
 											 						total: invoice_total)
+				invovice.generate_line_items(self.price, month_num)
+				invovice.generate_line_items(day_rent, date_num)
 				break
 			end
 		end
